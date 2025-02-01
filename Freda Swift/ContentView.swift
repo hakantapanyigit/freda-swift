@@ -29,6 +29,8 @@ class AudioPlayer: NSObject, ObservableObject {
     private var playerItemContext = 0
     @Published var isPlaying = false
     @Published var currentSong: Song?
+    @Published var currentTime: Double = 0
+    @Published var duration: Double = 0
     
     override init() {
         super.init()
@@ -138,44 +140,35 @@ class AudioPlayer: NSObject, ObservableObject {
     }
     
     func play(song: Song) {
-        print("Attempting to play song: \(song.title)")
-        
-        // Eğer aynı şarkıyı çalıyorsak
         if currentSong?.id == song.id {
             if isPlaying {
-                pause()
+                audioPlayer?.pause()
+                isPlaying = false
             } else {
-                resumePlayback()
+                audioPlayer?.play()
+                isPlaying = true
             }
             return
         }
         
-        // Önceki oynatıcıyı temizle
-        stop()
+        currentSong = song
+        duration = song.duration
         
-        // Audio session'ı aktifleştir
-        activateAudioSession()
+        let playerItem = AVPlayerItem(url: song.audioFileURL)
+        audioPlayer = AVPlayer(playerItem: playerItem)
         
-        // URL'yi kontrol et
-        guard let url = URL(string: song.audioFileURL.absoluteString) else {
-            print("Invalid URL for song: \(song.title)")
-            return
+        // Remove previous time observer if exists
+        if let observer = timeObserverToken {
+            audioPlayer?.removeTimeObserver(observer)
         }
         
-        // Asset'i yükle
-        let asset = AVAsset(url: url)
-        playerItem = AVPlayerItem(asset: asset)
+        // Add periodic time observer
+        timeObserverToken = audioPlayer?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1, preferredTimescale: 600), queue: .main) { [weak self] time in
+            self?.currentTime = time.seconds
+        }
         
-        // Player'ı oluştur
-        audioPlayer = AVPlayer(playerItem: playerItem)
-        audioPlayer?.automaticallyWaitsToMinimizeStalling = false
-        
-        // Gözlemcileri ekle
-        setupPlayerObservers()
-        
-        // Oynatmaya başla
-        resumePlayback()
-        currentSong = song
+        audioPlayer?.play()
+        isPlaying = true
         updateNowPlaying(for: song)
     }
     
@@ -403,7 +396,7 @@ struct ContentView: View {
                 }
                 
                 // Waveform
-                WaveformView()
+                WaveformView(audioPlayer: audioPlayer)
                     .frame(height: 63)
                 
                 Spacer()
@@ -453,15 +446,35 @@ struct ContentView: View {
 }
 
 struct WaveformView: View {
+    @ObservedObject var audioPlayer: AudioPlayer
+    private let barWidth: CGFloat = 1
+    private let barSpacing: CGFloat = 5
+    
     var body: some View {
-        HStack(spacing: 3) {
-            ForEach(0..<35, id: \.self) { index in
-                Rectangle()
-                    .fill(Color.white.opacity(0.5))
-                    .frame(width: 2, height: index % 2 == 0 ? 63 : 32)
+        GeometryReader { geometry in
+            let availableWidth = geometry.size.width
+            let barCount = Int((availableWidth + barSpacing) / (barWidth + barSpacing))
+            
+            HStack(spacing: barSpacing) {
+                ForEach(0..<barCount, id: \.self) { index in
+                    let progress = audioPlayer.currentTime / audioPlayer.duration
+                    let isPlayed = Double(index) / Double(barCount) <= progress
+                    let height = getBarHeight(at: index)
+                    
+                    Rectangle()
+                        .fill(isPlayed ? Color.white : Color.white.opacity(0.5))
+                        .frame(width: barWidth, height: height)
+                }
             }
+            .frame(maxWidth: .infinity, alignment: .center)
         }
+        .frame(height: 63)
         .padding(.vertical, 20)
+    }
+    
+    private func getBarHeight(at index: Int) -> CGFloat {
+        let pattern: [CGFloat] = [63, 32, 48, 24, 56, 40, 63, 32, 48, 24]
+        return pattern[index % pattern.count]
     }
 }
 
@@ -509,7 +522,7 @@ struct FeaturedCard: View {
                         .padding(.top, 10)
                     
                     // Waveform
-                    WaveformView()
+                    WaveformView(audioPlayer: audioPlayer)
                         .frame(height: 63)
                         .padding(.horizontal)
                         .matchedGeometryEffect(id: "waveform", in: animation)
@@ -694,7 +707,7 @@ struct DetailView: View {
                     .padding(.top, 4)
                 
                 // Waveform
-                WaveformView()
+                WaveformView(audioPlayer: audioPlayer)
                     .frame(height: 63)
                     .padding(.horizontal)
                     .padding(.top, 20)
