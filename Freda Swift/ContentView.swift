@@ -352,7 +352,7 @@ struct ContentView: View {
             category: "Meditation",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-3.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track3.mp3")!,
-            duration: 69,
+            duration: 189,
             description: "After a fckn hard day, you\nneed this.",
             backgroundColor: Color("F85C3A"),
             waveformPattern: [40, 60, 35, 55, 45, 63, 38, 58, 42, 62, 36, 56, 44, 61, 39, 59]
@@ -370,7 +370,7 @@ struct ContentView: View {
             // Main Content
             VStack(spacing: 0) {
                 mainContent
-                    .padding(.top, 40)
+                    .padding(.top, 20)
                 tabBar
             }
             
@@ -410,7 +410,7 @@ struct ContentView: View {
                 }
                 
                 // Waveform
-                WaveformView(audioPlayer: audioPlayer)
+                WaveformView(audioPlayer: audioPlayer, song: songs[currentSongIndex])
                     .frame(height: 63)
                 
                 Spacer()
@@ -461,8 +461,9 @@ struct ContentView: View {
 
 struct WaveformView: View {
     @ObservedObject var audioPlayer: AudioPlayer
+    let song: Song
     private let barWidth: CGFloat = 1
-    private let barSpacing: CGFloat = 5
+    private let barSpacing: CGFloat = 10
     @State private var isDragging = false
     @State private var tempCurrentTime: Double = 0
     
@@ -473,14 +474,16 @@ struct WaveformView: View {
             
             HStack(spacing: barSpacing) {
                 ForEach(0..<barCount, id: \.self) { index in
-                    let currentTime = isDragging ? tempCurrentTime : audioPlayer.currentTime
-                    let progress = currentTime / audioPlayer.duration
+                    let currentTime = isDragging ? tempCurrentTime : (audioPlayer.currentSong?.id == song.id ? audioPlayer.currentTime : 0)
+                    let progress = currentTime / song.duration
                     let isPlayed = Double(index) / Double(barCount) <= progress
-                    let height = getBarHeight(at: index, pattern: audioPlayer.currentSong?.waveformPattern)
+                    let height = getBarHeight(at: index, pattern: song.waveformPattern)
                     
                     Rectangle()
-                        .fill(isPlayed ? Color.white : Color.white.opacity(0.5))
+                        .fill(Color.white)
+                        .opacity(isPlayed ? 1.0 : 0.5)
                         .frame(width: barWidth, height: height)
+                        .animation(.easeInOut(duration: 0.3), value: isPlayed)
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
@@ -490,12 +493,12 @@ struct WaveformView: View {
                     .onChanged { value in
                         isDragging = true
                         let progress = min(max(value.location.x / geometry.size.width, 0), 1)
-                        tempCurrentTime = audioPlayer.duration * progress
+                        tempCurrentTime = song.duration * progress
                     }
                     .onEnded { value in
                         isDragging = false
                         let progress = min(max(value.location.x / geometry.size.width, 0), 1)
-                        let seekTime = audioPlayer.duration * progress
+                        let seekTime = song.duration * progress
                         audioPlayer.seek(to: seekTime)
                         tempCurrentTime = seekTime
                     }
@@ -505,13 +508,8 @@ struct WaveformView: View {
         .padding(.vertical, 20)
     }
     
-    private func getBarHeight(at index: Int, pattern: [CGFloat]?) -> CGFloat {
-        guard let pattern = pattern else {
-            // Varsayılan pattern
-            let defaultPattern: [CGFloat] = [63, 32, 48, 24, 56, 40, 63, 32, 48, 24]
-            return defaultPattern[index % defaultPattern.count]
-        }
-        return pattern[index % pattern.count]
+    private func getBarHeight(at index: Int, pattern: [CGFloat]) -> CGFloat {
+        pattern[index % pattern.count]
     }
 }
 
@@ -559,7 +557,7 @@ struct FeaturedCard: View {
                         .padding(.top, 10)
                     
                     // Waveform
-                    WaveformView(audioPlayer: audioPlayer)
+                    WaveformView(audioPlayer: audioPlayer, song: song)
                         .frame(height: 63)
                         .padding(.horizontal)
                         .matchedGeometryEffect(id: "waveform", in: animation)
@@ -744,7 +742,7 @@ struct DetailView: View {
                     .padding(.top, 4)
                 
                 // Waveform
-                WaveformView(audioPlayer: audioPlayer)
+                WaveformView(audioPlayer: audioPlayer, song: song)
                     .frame(height: 63)
                     .padding(.horizontal)
                     .padding(.top, 20)
