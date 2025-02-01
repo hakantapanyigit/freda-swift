@@ -330,7 +330,7 @@ struct ContentView: View {
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track1.mp3")!,
             duration: 180,
             description: "After a fckn hard day, you\nneed this.",
-            backgroundColor: Color(hex: "95957D")
+            backgroundColor: Color("95957D")
         ),
         Song(
             title: "Defeat Mental\nBreakdown",
@@ -339,7 +339,7 @@ struct ContentView: View {
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track2.mp3")!,
             duration: 240,
             description: "After a fckn hard day, you\nneed this.",
-            backgroundColor: Color(hex: "DADADA")
+            backgroundColor: Color("DADADA")
         ),
         Song(
             title: "777 Spiritual\nGrowth",
@@ -348,7 +348,7 @@ struct ContentView: View {
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track3.mp3")!,
             duration: 300,
             description: "After a fckn hard day, you\nneed this.",
-            backgroundColor: Color(hex: "F85C3A")
+            backgroundColor: Color("F85C3A")
         )
     ]
 
@@ -406,17 +406,7 @@ struct ContentView: View {
                 WaveformView()
                     .frame(height: 63)
                 
-                // Categories
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 25) {
-                        ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
-                            Text(category)
-                                .font(.system(size: 16))
-                                .foregroundColor(category == "Emotional" ? .black : .black.opacity(0.5))
-                                .fontWeight(category == "Emotional" ? .semibold : .light)
-                        }
-                    }
-                }
+                Spacer()
             }
             .padding(.horizontal)
             
@@ -468,9 +458,10 @@ struct WaveformView: View {
             ForEach(0..<35, id: \.self) { index in
                 Rectangle()
                     .fill(Color.white.opacity(0.5))
-                    .frame(width: 1, height: index % 2 == 0 ? 63 : 32)
+                    .frame(width: 2, height: index % 2 == 0 ? 63 : 32)
             }
         }
+        .padding(.vertical, 20)
     }
 }
 
@@ -480,174 +471,188 @@ struct FeaturedCard: View {
     @State private var isExpanded = false
     @State private var dragOffset: CGFloat = 0
     @Namespace private var animation
-    
+
     var body: some View {
         ZStack {
             if isExpanded {
-                // Expanded View
-                VStack(alignment: .leading, spacing: 0) {
-                    // Categories
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 25) {
-                            ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
-                                Text(category)
-                                    .font(.system(size: 16))
-                                    .foregroundColor(category == "Emotional" ? .white : .white.opacity(0.5))
-                                    .fontWeight(category == "Emotional" ? .semibold : .light)
-                                    .matchedGeometryEffect(id: "category-\(category)", in: animation)
-                            }
-                        }
-                        .padding(.horizontal)
-                        .padding(.top, 20)
-                    }
+                expandedView
+            } else {
+                collapsedView
+            }
+        }
+        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: isExpanded)
+        .onTapGesture {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                isExpanded = true
+            }
+        }
+    }
+    
+    private var expandedView: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            // Categories
+            categoryView(fontSize: 16)
+                .padding(.vertical, 8)
+            
+            // Album Art Container with Background
+            ZStack {
+                Color.black
+                    .matchedGeometryEffect(id: "background", in: animation, properties: .frame)
+                    .clipShape(RoundedRectangle(cornerRadius: 32))
+                    .ignoresSafeArea()
+                
+                VStack {
+                    albumArtView(height: 300)
+                        .padding(.top, 8)
                     
-                    // Album Art Container
-                    ZStack {
-                        AsyncImage(url: song.coverImageURL) { image in
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                                .matchedGeometryEffect(id: "albumArt", in: animation, anchor: .center)
-                        } placeholder: {
-                            Color.gray
-                        }
-                    }
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 300)
-                    .clipShape(RoundedRectangle(cornerRadius: 24))
-                    .padding(.horizontal)
-                    .padding(.top, 20)
-                    
-                    // Title and Description
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("Advanced Brain\nFunction")
-                            .font(.system(size: 32, weight: .bold))
-                            .foregroundColor(.white)
-                            .matchedGeometryEffect(id: "title", in: animation)
-                        
-                        Text("After a fckn hard day, you\nneed this.")
-                            .font(.system(size: 16))
-                            .foregroundColor(.white.opacity(0.7))
-                            .matchedGeometryEffect(id: "description", in: animation)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 20)
+                    titleDescriptionView(titleSize: 32, descriptionSize: 16)
+                        .padding(.top, 10)
                     
                     // Waveform
                     WaveformView()
                         .frame(height: 63)
                         .padding(.horizontal)
-                        .padding(.top, 20)
                         .matchedGeometryEffect(id: "waveform", in: animation)
                     
                     Spacer()
                     
                     // Controls
                     HStack(spacing: 40) {
-                        Spacer()
+                        Button(action: {}) {
+                            Circle()
+                                .fill(.white.opacity(0.15))
+                                .frame(width: 44, height: 44)
+                                .overlay(
+                                    Image(systemName: "xmark")
+                                        .foregroundColor(.white)
+                                )
+                        }
+                        
                         PlayButton(song: song, audioPlayer: audioPlayer)
                             .frame(width: 64, height: 64)
                             .matchedGeometryEffect(id: "playButton", in: animation)
-                        Spacer()
+                        
+                        Button(action: {}) {
+                            Circle()
+                                .fill(.white.opacity(0.15))
+                                .frame(width: 44, height: 44)
+                                .overlay(
+                                    Image(systemName: "arrow.clockwise")
+                                        .foregroundColor(.white)
+                                )
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.bottom, 40)
+                    .padding(.top, 20)
                 }
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .background(
-                    Color.black
-                        .matchedGeometryEffect(id: "background", in: animation)
-                        .clipShape(RoundedRectangle(cornerRadius: 32))
-                        .ignoresSafeArea()
-                )
-                .offset(y: dragOffset)
-                .opacity(1.0 - (dragOffset / 200.0))
-                .gesture(
-                    DragGesture()
-                        .onChanged { gesture in
-                            let translation = gesture.translation.height
-                            dragOffset = max(0, translation)
+                .padding(.horizontal, 8)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        }
+        .offset(y: dragOffset)
+        .opacity(1.0 - (dragOffset / 200.0))
+        .animation(.spring(response: 0.5, dampingFraction: 0.8), value: dragOffset)
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    dragOffset = max(0, gesture.translation.height)
+                }
+                .onEnded { gesture in
+                    let translation = gesture.translation.height
+                    withAnimation(.spring(response: 0.5, dampingFraction: 0.8)) {
+                        if translation > 100 {
+                            isExpanded = false
                         }
-                        .onEnded { gesture in
-                            let translation = gesture.translation.height
-                            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                                if translation > 100 {
-                                    isExpanded = false
-                                }
-                                dragOffset = 0
-                            }
-                        }
-                )
-            } else {
-                // Collapsed View
-                ZStack {
-                    Color.black
-                        .matchedGeometryEffect(id: "background", in: animation)
-                    
-                    VStack(spacing: 0) {
-                        // Categories (collapsed)
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 25) {
-                                ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
-                                    Text(category)
-                                        .font(.system(size: 12))
-                                        .foregroundColor(category == "Emotional" ? .white : .white.opacity(0.5))
-                                        .fontWeight(category == "Emotional" ? .semibold : .light)
-                                        .matchedGeometryEffect(id: "category-\(category)", in: animation)
-                                }
-                            }
-                            .padding(.horizontal)
-                            .padding(.top, 8)
-                        }
-                        
-                        HStack(spacing: 0) {
-                            VStack(alignment: .leading, spacing: 8) {
-                                Text("Advanced Brain\nFunction")
-                                    .font(.system(size: 18, weight: .medium))
-                                    .foregroundColor(.white)
-                                    .matchedGeometryEffect(id: "title", in: animation)
-                                
-                                Text("After a fckn hard day, you\nneed this.")
-                                    .font(.system(size: 12))
-                                    .foregroundColor(.white.opacity(0.5))
-                                    .matchedGeometryEffect(id: "description", in: animation)
-                                
-                                Spacer()
-                                
-                                PlayButton(song: song, audioPlayer: audioPlayer)
-                                    .frame(width: 32, height: 32)
-                                    .matchedGeometryEffect(id: "playButton", in: animation)
-                            }
-                            .padding()
-                            
-                            Spacer()
-                            
-                            // Album Art Container
-                            ZStack {
-                                AsyncImage(url: song.coverImageURL) { image in
-                                    image
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fill)
-                                        .matchedGeometryEffect(id: "albumArt", in: animation, anchor: .center)
-                                } placeholder: {
-                                    Color.gray
-                                }
-                            }
-                            .frame(width: 164, height: 144)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
-                            .padding(8)
-                        }
+                        dragOffset = 0
                     }
                 }
-                .frame(height: 200)
-                .clipShape(RoundedRectangle(cornerRadius: 24))
+        )
+    }
+    
+    private var collapsedView: some View {
+        VStack(spacing: 0) {
+            // Categories (collapsed)
+            categoryView(fontSize: 12)
+                .padding(.bottom, 8)
+            
+            // Content with background
+            ZStack {
+                Color.black
+                    .matchedGeometryEffect(id: "background", in: animation, properties: .frame)
+                
+                HStack(spacing: 0) {
+                    titleDescriptionView(titleSize: 18, descriptionSize: 12)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                    
+                    albumArtView(height: 144)
+                        .frame(width: 164)
+                        .padding(8)
+                }
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 24))
+        }
+        .frame(height: 200)
+    }
+    
+    private func categoryView(fontSize: CGFloat) -> some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 25) {
+                ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
+                    Text(category)
+                        .font(.system(size: fontSize))
+                        .foregroundColor(category == "Emotional" ? .black : .black.opacity(0.5))
+                        .fontWeight(category == "Emotional" ? .semibold : .light)
+                        .lineLimit(1)
+                        .fixedSize(horizontal: true, vertical: false)
+                        .matchedGeometryEffect(id: "category-\(category)", in: animation)
+                }
+            }
+            .padding(.horizontal)
+            .padding(.top, fontSize == 16 ? 20 : 8)
+        }
+    }
+    
+    private func titleDescriptionView(titleSize: CGFloat, descriptionSize: CGFloat) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Advanced Brain\nFunction")
+                .font(.system(size: titleSize, weight: titleSize == 32 ? .bold : .medium))
+                .foregroundColor(.white)
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .matchedGeometryEffect(id: "title", in: animation)
+            
+            Text("After a fckn hard day, you\nneed this.")
+                .font(.system(size: descriptionSize))
+                .foregroundColor(.white.opacity(0.7))
+                .lineLimit(2)
+                .fixedSize(horizontal: false, vertical: true)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .matchedGeometryEffect(id: "description", in: animation)
+            
+            if titleSize == 18 {
+                Spacer()
+                PlayButton(song: song, audioPlayer: audioPlayer)
+                    .frame(width: 32, height: 32)
+                    .matchedGeometryEffect(id: "playButton", in: animation)
             }
         }
-        .onTapGesture {
-            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
-                isExpanded = true
-            }
+        .padding(.horizontal, titleSize == 32 ? 16 : 0)
+    }
+    
+    private func albumArtView(height: CGFloat) -> some View {
+        AsyncImage(url: song.coverImageURL) { image in
+            image
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .matchedGeometryEffect(id: "albumArt", in: animation, properties: .frame)
+        } placeholder: {
+            Color.gray
         }
+        .frame(height: height)
+        .clipShape(RoundedRectangle(cornerRadius: height == 300 ? 24 : 16))
     }
 }
 
@@ -901,7 +906,7 @@ struct CustomSwiper: View {
 }
 
 extension Color {
-    init(hex: String) {
+    init(_ hex: String) {
         let hex = hex.trimmingCharacters(in: CharacterSet.alphanumerics.inverted)
         var int: UInt64 = 0
         Scanner(string: hex).scanHexInt64(&int)
