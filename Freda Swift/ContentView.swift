@@ -354,17 +354,27 @@ struct ContentView: View {
 
     var body: some View {
         ZStack {
-            // Renk interpolasyonu
-            let currentColor = songs[currentSongIndex].backgroundColor
-            let nextColor = songs[(currentSongIndex + 1) % songs.count].backgroundColor
-            Color.interpolate(from: currentColor, to: nextColor, progress: -swipeProgress)
+            // Background Color
+            Color.interpolate(from: songs[currentSongIndex].backgroundColor, 
+                            to: songs[(currentSongIndex + 1) % songs.count].backgroundColor, 
+                            progress: -swipeProgress)
                 .ignoresSafeArea()
             
+            // Main Content
             VStack(spacing: 0) {
                 mainContent
                     .padding(.top, 40)
                 tabBar
             }
+            
+            // Featured Card Overlay
+            VStack {
+                Spacer()
+                FeaturedCard(song: songs[1], audioPlayer: audioPlayer)
+                    .padding(.horizontal)
+                    .padding(.bottom, 100)
+            }
+            .zIndex(2)
         }
     }
     
@@ -407,9 +417,6 @@ struct ContentView: View {
                         }
                     }
                 }
-                
-                // Featured Card
-                FeaturedCard(song: songs[1], audioPlayer: audioPlayer)
             }
             .padding(.horizontal)
             
@@ -457,10 +464,10 @@ struct ContentView: View {
 
 struct WaveformView: View {
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 3) {
             ForEach(0..<35, id: \.self) { index in
                 Rectangle()
-                    .fill(Color.black.opacity(0.5))
+                    .fill(Color.white.opacity(0.5))
                     .frame(width: 1, height: index % 2 == 0 ? 63 : 32)
             }
         }
@@ -470,30 +477,238 @@ struct WaveformView: View {
 struct FeaturedCard: View {
     let song: Song
     @ObservedObject var audioPlayer: AudioPlayer
+    @State private var isExpanded = false
+    @State private var dragOffset: CGFloat = 0
+    @Namespace private var animation
+    
+    var body: some View {
+        ZStack {
+            if isExpanded {
+                // Expanded View
+                VStack(alignment: .leading, spacing: 0) {
+                    // Categories
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 25) {
+                            ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
+                                Text(category)
+                                    .font(.system(size: 16))
+                                    .foregroundColor(category == "Emotional" ? .white : .white.opacity(0.5))
+                                    .fontWeight(category == "Emotional" ? .semibold : .light)
+                                    .matchedGeometryEffect(id: "category-\(category)", in: animation)
+                            }
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 20)
+                    }
+                    
+                    // Album Art Container
+                    ZStack {
+                        AsyncImage(url: song.coverImageURL) { image in
+                            image
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .matchedGeometryEffect(id: "albumArt", in: animation, anchor: .center)
+                        } placeholder: {
+                            Color.gray
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 300)
+                    .clipShape(RoundedRectangle(cornerRadius: 24))
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                    
+                    // Title and Description
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Advanced Brain\nFunction")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundColor(.white)
+                            .matchedGeometryEffect(id: "title", in: animation)
+                        
+                        Text("After a fckn hard day, you\nneed this.")
+                            .font(.system(size: 16))
+                            .foregroundColor(.white.opacity(0.7))
+                            .matchedGeometryEffect(id: "description", in: animation)
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                    
+                    // Waveform
+                    WaveformView()
+                        .frame(height: 63)
+                        .padding(.horizontal)
+                        .padding(.top, 20)
+                        .matchedGeometryEffect(id: "waveform", in: animation)
+                    
+                    Spacer()
+                    
+                    // Controls
+                    HStack(spacing: 40) {
+                        Spacer()
+                        PlayButton(song: song, audioPlayer: audioPlayer)
+                            .frame(width: 64, height: 64)
+                            .matchedGeometryEffect(id: "playButton", in: animation)
+                        Spacer()
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.bottom, 40)
+                }
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(
+                    Color.black
+                        .matchedGeometryEffect(id: "background", in: animation)
+                        .clipShape(RoundedRectangle(cornerRadius: 32))
+                        .ignoresSafeArea()
+                )
+                .offset(y: dragOffset)
+                .opacity(1.0 - (dragOffset / 200.0))
+                .gesture(
+                    DragGesture()
+                        .onChanged { gesture in
+                            let translation = gesture.translation.height
+                            dragOffset = max(0, translation)
+                        }
+                        .onEnded { gesture in
+                            let translation = gesture.translation.height
+                            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                                if translation > 100 {
+                                    isExpanded = false
+                                }
+                                dragOffset = 0
+                            }
+                        }
+                )
+            } else {
+                // Collapsed View
+                ZStack {
+                    Color.black
+                        .matchedGeometryEffect(id: "background", in: animation)
+                    
+                    VStack(spacing: 0) {
+                        // Categories (collapsed)
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 25) {
+                                ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
+                                    Text(category)
+                                        .font(.system(size: 12))
+                                        .foregroundColor(category == "Emotional" ? .white : .white.opacity(0.5))
+                                        .fontWeight(category == "Emotional" ? .semibold : .light)
+                                        .matchedGeometryEffect(id: "category-\(category)", in: animation)
+                                }
+                            }
+                            .padding(.horizontal)
+                            .padding(.top, 8)
+                        }
+                        
+                        HStack(spacing: 0) {
+                            VStack(alignment: .leading, spacing: 8) {
+                                Text("Advanced Brain\nFunction")
+                                    .font(.system(size: 18, weight: .medium))
+                                    .foregroundColor(.white)
+                                    .matchedGeometryEffect(id: "title", in: animation)
+                                
+                                Text("After a fckn hard day, you\nneed this.")
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.white.opacity(0.5))
+                                    .matchedGeometryEffect(id: "description", in: animation)
+                                
+                                Spacer()
+                                
+                                PlayButton(song: song, audioPlayer: audioPlayer)
+                                    .frame(width: 32, height: 32)
+                                    .matchedGeometryEffect(id: "playButton", in: animation)
+                            }
+                            .padding()
+                            
+                            Spacer()
+                            
+                            // Album Art Container
+                            ZStack {
+                                AsyncImage(url: song.coverImageURL) { image in
+                                    image
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .matchedGeometryEffect(id: "albumArt", in: animation, anchor: .center)
+                                } placeholder: {
+                                    Color.gray
+                                }
+                            }
+                            .frame(width: 164, height: 144)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .padding(8)
+                        }
+                    }
+                }
+                .frame(height: 200)
+                .clipShape(RoundedRectangle(cornerRadius: 24))
+            }
+        }
+        .onTapGesture {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
+                isExpanded = true
+            }
+        }
+    }
+}
+
+struct DetailView: View {
+    let song: Song
+    @ObservedObject var audioPlayer: AudioPlayer
+    @Binding var isPresented: Bool
+    @Environment(\.dismiss) var dismiss
+    @State private var selectedCategory = "Emotional"
     
     var body: some View {
         ZStack {
             Color.black
+                .ignoresSafeArea()
             
-            HStack(spacing: 0) {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Advanced Brain\nFunction")
-                        .font(.system(size: 18, weight: .medium))
-                        .foregroundColor(.white)
-                    
-                    Text("After a fckn hard day, you\nneed this.")
-                        .font(.system(size: 12))
+            VStack(spacing: 0) {
+                // Header
+                HStack {
+                    Text("Latest")
                         .foregroundColor(.white.opacity(0.5))
-                    
+                        .font(.system(size: 16))
                     Spacer()
-                    
-                    PlayButton(song: song, audioPlayer: audioPlayer)
-                        .frame(width: 32, height: 32)
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
                 }
-                .padding()
+                .padding(.horizontal)
+                .padding(.top, 20)
                 
-                Spacer()
+                Text(song.title)
+                    .font(.system(size: 36, weight: .bold))
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top, 4)
                 
+                // Waveform
+                WaveformView()
+                    .frame(height: 63)
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                
+                // Categories
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 25) {
+                        ForEach(["Moments", "Emotional", "Motivation", "Headache"], id: \.self) { category in
+                            Text(category)
+                                .font(.system(size: 16))
+                                .foregroundColor(category == selectedCategory ? .white : .white.opacity(0.5))
+                                .fontWeight(category == selectedCategory ? .semibold : .light)
+                        }
+                    }
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                }
+                
+                // Album Art
                 AsyncImage(url: song.coverImageURL) { image in
                     image
                         .resizable()
@@ -501,13 +716,43 @@ struct FeaturedCard: View {
                 } placeholder: {
                     Color.gray
                 }
-                .frame(width: 164, height: 144)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
-                .padding(8)
+                .frame(maxWidth: .infinity)
+                .frame(height: 300)
+                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .padding(.horizontal)
+                .padding(.top, 20)
+                
+                // Description
+                Text(song.description)
+                    .font(.system(size: 16))
+                    .foregroundColor(.white.opacity(0.7))
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(.horizontal)
+                    .padding(.top, 20)
+                
+                Spacer()
+                
+                // Controls
+                HStack(spacing: 40) {
+                    Button(action: {}) {
+                        Image(systemName: "xmark")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
+                    
+                    PlayButton(song: song, audioPlayer: audioPlayer)
+                        .frame(width: 64, height: 64)
+                    
+                    Button(action: {}) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.title2)
+                            .foregroundColor(.white)
+                    }
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.bottom, 40)
             }
         }
-        .frame(height: 160)
-        .clipShape(RoundedRectangle(cornerRadius: 16))
     }
 }
 
@@ -561,9 +806,12 @@ struct CustomSwiper: View {
     @State private var offset: CGFloat = 0
     @State private var isDragging = false
     @Binding var swipeProgress: CGFloat
+    @State private var feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
+    @State private var lastFeedbackProgress: CGFloat = 0
     
     private let cardWidth: CGFloat = 160
     private let spacing: CGFloat = 45
+    private let feedbackThreshold: CGFloat = 0.1
     
     var body: some View {
         ZStack {
@@ -576,7 +824,7 @@ struct CustomSwiper: View {
             // İkinci kart (dinamik animasyonlu)
             if songs.count > 1 {
                 let nextIndex = (currentIndex + 1) % songs.count
-                let progress = -offset / cardWidth // -1 ile 0 arası
+                let progress = CGFloat(-offset / cardWidth) // -1 ile 0 arası
                 cardView(for: songs[nextIndex], at: 1)
                     .offset(x: spacing * (1 - abs(progress)))
                     .scaleEffect(0.8 + (abs(progress) / 4))
@@ -597,6 +845,14 @@ struct CustomSwiper: View {
                             withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                                 offset = min(0, gesture.translation.width)
                                 swipeProgress = offset / cardWidth
+                                
+                                // Swipe sırasında hafif feedback
+                                let currentProgress = abs(swipeProgress)
+                                if currentProgress - lastFeedbackProgress > feedbackThreshold {
+                                    feedbackGenerator.prepare()
+                                    feedbackGenerator.impactOccurred(intensity: 0.3)
+                                    lastFeedbackProgress = currentProgress
+                                }
                             }
                         }
                         .onEnded { gesture in
@@ -604,15 +860,22 @@ struct CustomSwiper: View {
                             let threshold = cardWidth * 0.4
                             withAnimation(.spring(response: 0.6, dampingFraction: 0.8)) {
                                 if gesture.translation.width < -threshold {
+                                    // Swipe tamamlandığında güçlü feedback
+                                    feedbackGenerator.prepare()
+                                    feedbackGenerator.impactOccurred(intensity: 0.8)
                                     currentIndex = (currentIndex + 1) % songs.count
                                 }
                                 offset = 0
                                 swipeProgress = 0
+                                lastFeedbackProgress = 0
                             }
                         }
                 )
         }
         .frame(height: 200)
+        .onAppear {
+            feedbackGenerator.prepare()
+        }
     }
     
     private func cardView(for song: Song, at position: Int) -> some View {
