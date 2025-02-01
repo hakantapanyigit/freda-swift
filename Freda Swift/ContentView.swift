@@ -20,6 +20,7 @@ struct Song: Identifiable {
     let duration: TimeInterval
     let description: String
     let backgroundColor: Color
+    let waveformPattern: [CGFloat]
 }
 
 class AudioPlayer: NSObject, ObservableObject {
@@ -140,12 +141,14 @@ class AudioPlayer: NSObject, ObservableObject {
     }
     
     func play(song: Song) {
+        // Önce mevcut şarkıyı durdur
+        stop()
+        
+        // Aynı şarkıysa sadece oynat/durdur
         if currentSong?.id == song.id {
             if isPlaying {
-                audioPlayer?.pause()
                 isPlaying = false
             } else {
-                // Mevcut pozisyondan devam et
                 audioPlayer?.play()
                 isPlaying = true
             }
@@ -155,26 +158,30 @@ class AudioPlayer: NSObject, ObservableObject {
         // Yeni şarkı çalınacaksa
         currentSong = song
         duration = song.duration
-        currentTime = 0 // Yeni şarkı için süreyi sıfırla
+        currentTime = 0
+        
+        // Önceki observer'ı temizle
+        if let observer = timeObserverToken {
+            audioPlayer?.removeTimeObserver(observer)
+            timeObserverToken = nil
+        }
         
         // Yeni player oluştur
         let playerItem = AVPlayerItem(url: song.audioFileURL)
         audioPlayer = AVPlayer(playerItem: playerItem)
         
-        // Remove previous time observer if exists
-        if let observer = timeObserverToken {
-            audioPlayer?.removeTimeObserver(observer)
-        }
-        
-        // Add periodic time observer
+        // Yeni time observer ekle
         timeObserverToken = audioPlayer?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1, preferredTimescale: 600), queue: .main) { [weak self] time in
             self?.currentTime = time.seconds
             self?.updateNowPlayingTime(time: time)
         }
         
-        audioPlayer?.play()
-        isPlaying = true
-        updateNowPlaying(for: song)
+        // Oynatmaya başla
+        DispatchQueue.main.async { [weak self] in
+            self?.audioPlayer?.play()
+            self?.isPlaying = true
+            self?.updateNowPlaying(for: song)
+        }
     }
     
     private func setupPlayerObservers() {
@@ -251,24 +258,13 @@ class AudioPlayer: NSObject, ObservableObject {
     
     func stop() {
         audioPlayer?.pause()
-        audioPlayer?.seek(to: .zero)
-        removePlayerObservers()
-        audioPlayer = nil
-        playerItem = nil
         isPlaying = false
-        currentSong = nil
-        MPNowPlayingInfoCenter.default().nowPlayingInfo = nil
-        print("Playback stopped")
-    }
-    
-    private func removePlayerObservers() {
-        if let token = timeObserverToken {
-            audioPlayer?.removeTimeObserver(token)
+        
+        // Time observer'ı temizle
+        if let observer = timeObserverToken {
+            audioPlayer?.removeTimeObserver(observer)
             timeObserverToken = nil
         }
-        
-        playerItem?.removeObserver(self, forKeyPath: #keyPath(AVPlayerItem.status))
-        NotificationCenter.default.removeObserver(self)
     }
     
     deinit {
@@ -336,27 +332,30 @@ struct ContentView: View {
             category: "Emotional",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-1.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track1.mp3")!,
-            duration: 69, // 1:09
+            duration: 69,
             description: "After a fckn hard day, you\nneed this.",
-            backgroundColor: Color("95957D")
+            backgroundColor: Color("95957D"),
+            waveformPattern: [63, 45, 58, 32, 52, 38, 60, 42, 55, 35, 50, 40, 62, 48, 56, 30]
         ),
         Song(
             title: "Defeat Mental\nBreakdown",
             category: "Focus",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-2.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track2.mp3")!,
-            duration: 15, // 0:15
+            duration: 15,
             description: "After a fckn hard day, you\nneed this.",
-            backgroundColor: Color("DADADA")
+            backgroundColor: Color("DADADA"),
+            waveformPattern: [30, 50, 25, 45, 20, 40, 28, 48, 22, 42, 26, 46, 24, 44, 28, 47]
         ),
         Song(
             title: "777 Spiritual\nGrowth",
             category: "Meditation",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-3.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track3.mp3")!,
-            duration: 69, // 1:09
+            duration: 69,
             description: "After a fckn hard day, you\nneed this.",
-            backgroundColor: Color("F85C3A")
+            backgroundColor: Color("F85C3A"),
+            waveformPattern: [40, 60, 35, 55, 45, 63, 38, 58, 42, 62, 36, 56, 44, 61, 39, 59]
         )
     ]
 
@@ -388,7 +387,7 @@ struct ContentView: View {
     
     var mainContent: some View {
         VStack(alignment: .leading, spacing: 20) {
-            CustomSwiper(songs: songs, currentIndex: $currentSongIndex, swipeProgress: $swipeProgress)
+            CustomSwiper(songs: songs, currentIndex: $currentSongIndex, swipeProgress: $swipeProgress, audioPlayer: audioPlayer)
                 .padding(.horizontal)
             
             VStack(alignment: .leading, spacing: 24) {
@@ -466,7 +465,7 @@ struct WaveformView: View {
     private let barSpacing: CGFloat = 5
     @State private var isDragging = false
     @State private var tempCurrentTime: Double = 0
-
+    
     var body: some View {
         GeometryReader { geometry in
             let availableWidth = geometry.size.width
@@ -477,7 +476,7 @@ struct WaveformView: View {
                     let currentTime = isDragging ? tempCurrentTime : audioPlayer.currentTime
                     let progress = currentTime / audioPlayer.duration
                     let isPlayed = Double(index) / Double(barCount) <= progress
-                    let height = getBarHeight(at: index)
+                    let height = getBarHeight(at: index, pattern: audioPlayer.currentSong?.waveformPattern)
                     
                     Rectangle()
                         .fill(isPlayed ? Color.white : Color.white.opacity(0.5))
@@ -506,8 +505,12 @@ struct WaveformView: View {
         .padding(.vertical, 20)
     }
     
-    private func getBarHeight(at index: Int) -> CGFloat {
-        let pattern: [CGFloat] = [63, 32, 48, 24, 56, 40, 63, 32, 48, 24]
+    private func getBarHeight(at index: Int, pattern: [CGFloat]?) -> CGFloat {
+        guard let pattern = pattern else {
+            // Varsayılan pattern
+            let defaultPattern: [CGFloat] = [63, 32, 48, 24, 56, 40, 63, 32, 48, 24]
+            return defaultPattern[index % defaultPattern.count]
+        }
         return pattern[index % pattern.count]
     }
 }
@@ -860,6 +863,7 @@ struct CustomSwiper: View {
     @Binding var swipeProgress: CGFloat
     @State private var feedbackGenerator = UIImpactFeedbackGenerator(style: .soft)
     @State private var lastFeedbackProgress: CGFloat = 0
+    @ObservedObject var audioPlayer: AudioPlayer
     
     private let cardWidth: CGFloat = 160
     private let spacing: CGFloat = 45
@@ -927,6 +931,17 @@ struct CustomSwiper: View {
         .frame(height: 200)
         .onAppear {
             feedbackGenerator.prepare()
+            // İlk şarkıyı çal
+            if !songs.isEmpty {
+                audioPlayer.play(song: songs[currentIndex])
+            }
+        }
+        .onChange(of: currentIndex) { oldValue, newValue in
+            // Güvenli şarkı değişimi
+            guard newValue >= 0 && newValue < songs.count else { return }
+            DispatchQueue.main.async {
+                audioPlayer.play(song: songs[newValue])
+            }
         }
     }
     
