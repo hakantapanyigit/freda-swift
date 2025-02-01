@@ -1,0 +1,614 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		D035E96A2D4DB4E60051DB13 /* Freda_SwiftApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035E9692D4DB4E60051DB13 /* Freda_SwiftApp.swift */; };
+		D035E96C2D4DB4E60051DB13 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035E96B2D4DB4E60051DB13 /* ContentView.swift */; };
+		D035E96E2D4DB4E70051DB13 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D035E96D2D4DB4E70051DB13 /* Assets.xcassets */; };
+		D035E9712D4DB4E70051DB13 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D035E9702D4DB4E70051DB13 /* Preview Assets.xcassets */; };
+		D035E9732D4DB4E70051DB13 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035E9722D4DB4E70051DB13 /* Persistence.swift */; };
+		D035E9762D4DB4E70051DB13 /* Freda_Swift.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D035E9742D4DB4E70051DB13 /* Freda_Swift.xcdatamodeld */; };
+		D035E9802D4DB4E70051DB13 /* Freda_SwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035E97F2D4DB4E70051DB13 /* Freda_SwiftTests.swift */; };
+		D035E98A2D4DB4E70051DB13 /* Freda_SwiftUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035E9892D4DB4E70051DB13 /* Freda_SwiftUITests.swift */; };
+		D035E98C2D4DB4E70051DB13 /* Freda_SwiftUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D035E98B2D4DB4E70051DB13 /* Freda_SwiftUITestsLaunchTests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		D035E97C2D4DB4E70051DB13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D035E95E2D4DB4E60051DB13 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D035E9652D4DB4E60051DB13;
+			remoteInfo = "Freda Swift";
+		};
+		D035E9862D4DB4E70051DB13 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D035E95E2D4DB4E60051DB13 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D035E9652D4DB4E60051DB13;
+			remoteInfo = "Freda Swift";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		D035E9662D4DB4E60051DB13 /* Freda Swift.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Freda Swift.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D035E9692D4DB4E60051DB13 /* Freda_SwiftApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Freda_SwiftApp.swift; sourceTree = "<group>"; };
+		D035E96B2D4DB4E60051DB13 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		D035E96D2D4DB4E70051DB13 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D035E9702D4DB4E70051DB13 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		D035E9722D4DB4E70051DB13 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
+		D035E9752D4DB4E70051DB13 /* Freda_Swift.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Freda_Swift.xcdatamodel; sourceTree = "<group>"; };
+		D035E97B2D4DB4E70051DB13 /* Freda SwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Freda SwiftTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D035E97F2D4DB4E70051DB13 /* Freda_SwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Freda_SwiftTests.swift; sourceTree = "<group>"; };
+		D035E9852D4DB4E70051DB13 /* Freda SwiftUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Freda SwiftUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D035E9892D4DB4E70051DB13 /* Freda_SwiftUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Freda_SwiftUITests.swift; sourceTree = "<group>"; };
+		D035E98B2D4DB4E70051DB13 /* Freda_SwiftUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Freda_SwiftUITestsLaunchTests.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		D035E9632D4DB4E60051DB13 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D035E9782D4DB4E70051DB13 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D035E9822D4DB4E70051DB13 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		D035E95D2D4DB4E60051DB13 = {
+			isa = PBXGroup;
+			children = (
+				D035E9682D4DB4E60051DB13 /* Freda Swift */,
+				D035E97E2D4DB4E70051DB13 /* Freda SwiftTests */,
+				D035E9882D4DB4E70051DB13 /* Freda SwiftUITests */,
+				D035E9672D4DB4E60051DB13 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		D035E9672D4DB4E60051DB13 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				D035E9662D4DB4E60051DB13 /* Freda Swift.app */,
+				D035E97B2D4DB4E70051DB13 /* Freda SwiftTests.xctest */,
+				D035E9852D4DB4E70051DB13 /* Freda SwiftUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		D035E9682D4DB4E60051DB13 /* Freda Swift */ = {
+			isa = PBXGroup;
+			children = (
+				D035E9692D4DB4E60051DB13 /* Freda_SwiftApp.swift */,
+				D035E96B2D4DB4E60051DB13 /* ContentView.swift */,
+				D035E96D2D4DB4E70051DB13 /* Assets.xcassets */,
+				D035E9722D4DB4E70051DB13 /* Persistence.swift */,
+				D035E9742D4DB4E70051DB13 /* Freda_Swift.xcdatamodeld */,
+				D035E96F2D4DB4E70051DB13 /* Preview Content */,
+			);
+			path = "Freda Swift";
+			sourceTree = "<group>";
+		};
+		D035E96F2D4DB4E70051DB13 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				D035E9702D4DB4E70051DB13 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		D035E97E2D4DB4E70051DB13 /* Freda SwiftTests */ = {
+			isa = PBXGroup;
+			children = (
+				D035E97F2D4DB4E70051DB13 /* Freda_SwiftTests.swift */,
+			);
+			path = "Freda SwiftTests";
+			sourceTree = "<group>";
+		};
+		D035E9882D4DB4E70051DB13 /* Freda SwiftUITests */ = {
+			isa = PBXGroup;
+			children = (
+				D035E9892D4DB4E70051DB13 /* Freda_SwiftUITests.swift */,
+				D035E98B2D4DB4E70051DB13 /* Freda_SwiftUITestsLaunchTests.swift */,
+			);
+			path = "Freda SwiftUITests";
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		D035E9652D4DB4E60051DB13 /* Freda Swift */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D035E98F2D4DB4E70051DB13 /* Build configuration list for PBXNativeTarget "Freda Swift" */;
+			buildPhases = (
+				D035E9622D4DB4E60051DB13 /* Sources */,
+				D035E9632D4DB4E60051DB13 /* Frameworks */,
+				D035E9642D4DB4E60051DB13 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "Freda Swift";
+			productName = "Freda Swift";
+			productReference = D035E9662D4DB4E60051DB13 /* Freda Swift.app */;
+			productType = "com.apple.product-type.application";
+		};
+		D035E97A2D4DB4E70051DB13 /* Freda SwiftTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D035E9922D4DB4E70051DB13 /* Build configuration list for PBXNativeTarget "Freda SwiftTests" */;
+			buildPhases = (
+				D035E9772D4DB4E70051DB13 /* Sources */,
+				D035E9782D4DB4E70051DB13 /* Frameworks */,
+				D035E9792D4DB4E70051DB13 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D035E97D2D4DB4E70051DB13 /* PBXTargetDependency */,
+			);
+			name = "Freda SwiftTests";
+			productName = "Freda SwiftTests";
+			productReference = D035E97B2D4DB4E70051DB13 /* Freda SwiftTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		D035E9842D4DB4E70051DB13 /* Freda SwiftUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D035E9952D4DB4E70051DB13 /* Build configuration list for PBXNativeTarget "Freda SwiftUITests" */;
+			buildPhases = (
+				D035E9812D4DB4E70051DB13 /* Sources */,
+				D035E9822D4DB4E70051DB13 /* Frameworks */,
+				D035E9832D4DB4E70051DB13 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				D035E9872D4DB4E70051DB13 /* PBXTargetDependency */,
+			);
+			name = "Freda SwiftUITests";
+			productName = "Freda SwiftUITests";
+			productReference = D035E9852D4DB4E70051DB13 /* Freda SwiftUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		D035E95E2D4DB4E60051DB13 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1530;
+				LastUpgradeCheck = 1530;
+				TargetAttributes = {
+					D035E9652D4DB4E60051DB13 = {
+						CreatedOnToolsVersion = 15.3;
+					};
+					D035E97A2D4DB4E70051DB13 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = D035E9652D4DB4E60051DB13;
+					};
+					D035E9842D4DB4E70051DB13 = {
+						CreatedOnToolsVersion = 15.3;
+						TestTargetID = D035E9652D4DB4E60051DB13;
+					};
+				};
+			};
+			buildConfigurationList = D035E9612D4DB4E60051DB13 /* Build configuration list for PBXProject "Freda Swift" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = D035E95D2D4DB4E60051DB13;
+			productRefGroup = D035E9672D4DB4E60051DB13 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				D035E9652D4DB4E60051DB13 /* Freda Swift */,
+				D035E97A2D4DB4E70051DB13 /* Freda SwiftTests */,
+				D035E9842D4DB4E70051DB13 /* Freda SwiftUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		D035E9642D4DB4E60051DB13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D035E9712D4DB4E70051DB13 /* Preview Assets.xcassets in Resources */,
+				D035E96E2D4DB4E70051DB13 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D035E9792D4DB4E70051DB13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D035E9832D4DB4E70051DB13 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		D035E9622D4DB4E60051DB13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D035E9732D4DB4E70051DB13 /* Persistence.swift in Sources */,
+				D035E96C2D4DB4E60051DB13 /* ContentView.swift in Sources */,
+				D035E9762D4DB4E70051DB13 /* Freda_Swift.xcdatamodeld in Sources */,
+				D035E96A2D4DB4E60051DB13 /* Freda_SwiftApp.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D035E9772D4DB4E70051DB13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D035E9802D4DB4E70051DB13 /* Freda_SwiftTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D035E9812D4DB4E70051DB13 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D035E98A2D4DB4E70051DB13 /* Freda_SwiftUITests.swift in Sources */,
+				D035E98C2D4DB4E70051DB13 /* Freda_SwiftUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		D035E97D2D4DB4E70051DB13 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D035E9652D4DB4E60051DB13 /* Freda Swift */;
+			targetProxy = D035E97C2D4DB4E70051DB13 /* PBXContainerItemProxy */;
+		};
+		D035E9872D4DB4E70051DB13 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D035E9652D4DB4E60051DB13 /* Freda Swift */;
+			targetProxy = D035E9862D4DB4E70051DB13 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		D035E98D2D4DB4E70051DB13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		D035E98E2D4DB4E70051DB13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		D035E9902D4DB4E70051DB13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Freda Swift/Preview Content\"";
+				DEVELOPMENT_TEAM = 8N5PZFY6BF;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.projeapp.Freda-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D035E9912D4DB4E70051DB13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"Freda Swift/Preview Content\"";
+				DEVELOPMENT_TEAM = 8N5PZFY6BF;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.projeapp.Freda-Swift";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		D035E9932D4DB4E70051DB13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8N5PZFY6BF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.projeapp.Freda-SwiftTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Freda Swift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Freda Swift";
+			};
+			name = Debug;
+		};
+		D035E9942D4DB4E70051DB13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8N5PZFY6BF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.projeapp.Freda-SwiftTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Freda Swift.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/Freda Swift";
+			};
+			name = Release;
+		};
+		D035E9962D4DB4E70051DB13 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8N5PZFY6BF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.projeapp.Freda-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Freda Swift";
+			};
+			name = Debug;
+		};
+		D035E9972D4DB4E70051DB13 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = 8N5PZFY6BF;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.projeapp.Freda-SwiftUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "Freda Swift";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		D035E9612D4DB4E60051DB13 /* Build configuration list for PBXProject "Freda Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D035E98D2D4DB4E70051DB13 /* Debug */,
+				D035E98E2D4DB4E70051DB13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D035E98F2D4DB4E70051DB13 /* Build configuration list for PBXNativeTarget "Freda Swift" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D035E9902D4DB4E70051DB13 /* Debug */,
+				D035E9912D4DB4E70051DB13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D035E9922D4DB4E70051DB13 /* Build configuration list for PBXNativeTarget "Freda SwiftTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D035E9932D4DB4E70051DB13 /* Debug */,
+				D035E9942D4DB4E70051DB13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D035E9952D4DB4E70051DB13 /* Build configuration list for PBXNativeTarget "Freda SwiftUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D035E9962D4DB4E70051DB13 /* Debug */,
+				D035E9972D4DB4E70051DB13 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		D035E9742D4DB4E70051DB13 /* Freda_Swift.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				D035E9752D4DB4E70051DB13 /* Freda_Swift.xcdatamodel */,
+			);
+			currentVersion = D035E9752D4DB4E70051DB13 /* Freda_Swift.xcdatamodel */;
+			path = Freda_Swift.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
+	};
+	rootObject = D035E95E2D4DB4E60051DB13 /* Project object */;
+}
