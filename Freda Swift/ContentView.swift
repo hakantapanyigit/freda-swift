@@ -145,15 +145,19 @@ class AudioPlayer: NSObject, ObservableObject {
                 audioPlayer?.pause()
                 isPlaying = false
             } else {
+                // Mevcut pozisyondan devam et
                 audioPlayer?.play()
                 isPlaying = true
             }
             return
         }
         
+        // Yeni şarkı çalınacaksa
         currentSong = song
         duration = song.duration
+        currentTime = 0 // Yeni şarkı için süreyi sıfırla
         
+        // Yeni player oluştur
         let playerItem = AVPlayerItem(url: song.audioFileURL)
         audioPlayer = AVPlayer(playerItem: playerItem)
         
@@ -165,6 +169,7 @@ class AudioPlayer: NSObject, ObservableObject {
         // Add periodic time observer
         timeObserverToken = audioPlayer?.addPeriodicTimeObserver(forInterval: CMTime(seconds: 0.1, preferredTimescale: 600), queue: .main) { [weak self] time in
             self?.currentTime = time.seconds
+            self?.updateNowPlayingTime(time: time)
         }
         
         audioPlayer?.play()
@@ -307,6 +312,16 @@ class AudioPlayer: NSObject, ObservableObject {
         
         MPNowPlayingInfoCenter.default().nowPlayingInfo = nowPlayingInfo
     }
+    
+    func seek(to time: Double) {
+        let cmTime = CMTime(seconds: time, preferredTimescale: 600)
+        audioPlayer?.seek(to: cmTime) { [weak self] _ in
+            self?.currentTime = time
+            if self?.isPlaying == true {
+                self?.audioPlayer?.play()
+            }
+        }
+    }
 }
 
 struct ContentView: View {
@@ -321,7 +336,7 @@ struct ContentView: View {
             category: "Emotional",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-1.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track1.mp3")!,
-            duration: 180,
+            duration: 69, // 1:09
             description: "After a fckn hard day, you\nneed this.",
             backgroundColor: Color("95957D")
         ),
@@ -330,7 +345,7 @@ struct ContentView: View {
             category: "Focus",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-2.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track2.mp3")!,
-            duration: 240,
+            duration: 15, // 0:15
             description: "After a fckn hard day, you\nneed this.",
             backgroundColor: Color("DADADA")
         ),
@@ -339,7 +354,7 @@ struct ContentView: View {
             category: "Meditation",
             coverImageURL: URL(string: "https://flappybird.proje.app/upload/album-art-3.png")!,
             audioFileURL: URL(string: "https://flappybird.proje.app/upload/track3.mp3")!,
-            duration: 300,
+            duration: 69, // 1:09
             description: "After a fckn hard day, you\nneed this.",
             backgroundColor: Color("F85C3A")
         )
@@ -449,7 +464,9 @@ struct WaveformView: View {
     @ObservedObject var audioPlayer: AudioPlayer
     private let barWidth: CGFloat = 1
     private let barSpacing: CGFloat = 5
-    
+    @State private var isDragging = false
+    @State private var tempCurrentTime: Double = 0
+
     var body: some View {
         GeometryReader { geometry in
             let availableWidth = geometry.size.width
@@ -457,7 +474,8 @@ struct WaveformView: View {
             
             HStack(spacing: barSpacing) {
                 ForEach(0..<barCount, id: \.self) { index in
-                    let progress = audioPlayer.currentTime / audioPlayer.duration
+                    let currentTime = isDragging ? tempCurrentTime : audioPlayer.currentTime
+                    let progress = currentTime / audioPlayer.duration
                     let isPlayed = Double(index) / Double(barCount) <= progress
                     let height = getBarHeight(at: index)
                     
@@ -467,6 +485,22 @@ struct WaveformView: View {
                 }
             }
             .frame(maxWidth: .infinity, alignment: .center)
+            .contentShape(Rectangle())
+            .gesture(
+                DragGesture(minimumDistance: 0)
+                    .onChanged { value in
+                        isDragging = true
+                        let progress = min(max(value.location.x / geometry.size.width, 0), 1)
+                        tempCurrentTime = audioPlayer.duration * progress
+                    }
+                    .onEnded { value in
+                        isDragging = false
+                        let progress = min(max(value.location.x / geometry.size.width, 0), 1)
+                        let seekTime = audioPlayer.duration * progress
+                        audioPlayer.seek(to: seekTime)
+                        tempCurrentTime = seekTime
+                    }
+            )
         }
         .frame(height: 63)
         .padding(.vertical, 20)
